@@ -4,6 +4,8 @@ from django.template.loader import render_to_string
 from .models import Comment
 from .forms import CommentForm
 
+# this views should be switched to CBV
+
 # display all comments 
 def comment_list(request):
     comment_list = Comment.objects.all()
