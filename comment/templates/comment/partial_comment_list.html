@@ -1,0 +1,26 @@
+{% for comment in comment_list %}
+<tr>
+  <td>{{ comment.id }}</td>
+  <td>{{ comment.body }}</td>
+  <td>{{ comment.publisher }}</td>
+  <td>{{ comment.post }}</td>
+  <td>
+    <button type="button"
+            class="btn btn-warning btn-sm js-update-comment"
+            data-url="{% url 'comment_update' comment.id %}">
+      <span class="glyphicon glyphicon-pencil"></span> Edit
+    </button>
+  </td>
+  <td>
+    <button type="button"
+            class="btn btn-danger btn-sm js-delete-comment"
+            data-url="{% url 'comment_delete' comment.id %}">
+      <span class="glyphicon glyphicon-trash"></span>Delete
+    </button>
+  </td>
+</tr>
+{% empty %}
+<tr>
+  <td colspan="6" class="text-center bg-warning">No comment</td>
+</tr>
+{% endfor %}

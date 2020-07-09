@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Comment List {% endblock %}
+
+{% block content %} 
+<h1>Comment Crud Operations</h1>
+
+<!-- BUTTON TO TRIGGER THE ACTION -->
+<p>
+<button type="button" class="btn btn-success js-create-comment" data-url="{% url 'comment_create' %}">
+  <span class="glyphicon glyphicon-plus"></span>
+  New Comment
+</button>
+</p>
+
+<table class="table" id="comment-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Body</th>
+      <th>Publisher</th>
+      <th>Post</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% include 'comment/partial_comment_list.html' %}    
+  </tbody>
+</table>
+
+<!-- THE MODAL WE WILL BE USING -->
+<div class="modal fade" id="modal-comment">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %} 
+<script src='{% static 'comment/js/jquery-crud-operations.js'%}'></script>
+{% endblock %}
