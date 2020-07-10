@@ -1,16 +1,18 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.views.generic import ListView
+from django.views import View
 from django.template.loader import render_to_string
 from .models import Comment
 from .forms import CommentForm
 
-# this views should be switched to CBV
 
 # display all comments 
-def comment_list(request):
-    comment_list = Comment.objects.all()
-    context = {'comment_list': comment_list}
-    return render(request, 'comment/comment_list.html', context)
+class CommentList(ListView):
+    model = Comment
+    template_name = 'comment/comment_list.html'
+    context_object_name = 'comment_list'
+
 
 
 '''
@@ -30,67 +32,74 @@ def comment_list(request):
       rerender partail_comment_create.html and display the form for the user with errors
 '''
 
-def comment_create(request):
+class CommentCreate(View):
     data = dict()
 
-    if request.method == 'POST':
+    def get(self, request): # render partial_comment_create.html for user
+        data = self.data
+        form = CommentForm()
+        data['html_form'] = render_to_string('comment/partial_comment_create.html', {'form': form}, request=request)
+        return JsonResponse(data)
+
+    def post(self, request): # validate form and render partial_comment_list.html if success
+        data = self.data
         form = CommentForm(request.POST)
         if form.is_valid():
             form.save()
             data['form_is_valid'] = True
             data['html_comment_list'] = render_to_string('comment/partial_comment_list.html', 
-                                                        {'comment_list': Comment.objects.all()}, 
-                                                        request=request)
+                    {'comment_list': Comment.objects.all()}, 
+                    request=request)
             return JsonResponse(data)
         else:
             data['form_is_valid'] = False
             data['html_form'] = render_to_string('comment/partial_comment_create.html', {'form': form}, request=request)
             return JsonResponse(data)
 
-    else:
-
-        form = CommentForm()
-        data['html_form'] = render_to_string('comment/partial_comment_create.html', {'form': form}, request=request)
-        return JsonResponse(data)
-
-
-def comment_update(request, pk):
+class CommentUpdate(View):
     data = dict()
 
-    if request.method == 'POST':
-        comment = get_object_or_404(Comment, pk=pk)
+    def get(self, request, *args, **kwargs): # render partial_comment_udpate.html for user
+        data = self.data
+        comment = get_object_or_404(Comment, pk=kwargs['pk'])
+        print(comment)
+        form = CommentForm(instance=comment)
+        data['html_form'] = render_to_string('comment/partial_comment_update.html', {'form': form}, request=request)
+        return JsonResponse(data)
+
+    def post(self, request, *args, **kwargs): # validate form and render partial_comment_list.html if success
+        data = self.data
+        comment = get_object_or_404(Comment, pk=kwargs['pk'])
         form = CommentForm(request.POST, instance=comment)
         if form.is_valid():
             form.save()
             data['form_is_valid'] = True
             data['html_comment_list'] = render_to_string('comment/partial_comment_list.html', 
-                                                        {'comment_list': Comment.objects.all()}, 
-                                                        request=request)
+                    {'comment_list': Comment.objects.all()}, 
+                    request=request)
             return JsonResponse(data)
         else:
             data['form_is_valid'] = False
             data['html_form'] = render_to_string('comment/partial_comment_update.html', {'form': form}, request=request)
             return JsonResponse(data)
 
-    else:
-        comment = get_object_or_404(Comment, pk=pk)
-        form = CommentForm(instance=comment)
-        data['html_form'] = render_to_string('comment/partial_comment_update.html', {'form': form}, request=request)
-        return JsonResponse(data)
 
-def comment_delete(request, pk):
+
+class CommentDelete(View):
     data = dict()
 
-    if request.method == 'POST':
-        comment = get_object_or_404(Comment, pk=pk)
+    def post(self, request, *args, **kwargs): # delete comment and render partial_comment_list.html if success
+        data = self.data
+        comment = get_object_or_404(Comment, pk=kwargs['pk'])
         comment.delete()
         data['html_comment_list'] = render_to_string('comment/partial_comment_list.html', 
-                                                    {'comment_list': Comment.objects.all()}, 
-                                                    request=request)
+                {'comment_list': Comment.objects.all()}, 
+                request=request)
         return JsonResponse(data)
 
-    else:
-        comment = get_object_or_404(Comment, pk=pk)
+    def get(self, request, *args, **kwargs): # render partial_comment_delete.html for user
+        data = self.data
+        comment = get_object_or_404(Comment, pk=kwargs['pk'])
         data['html_form'] = render_to_string('comment/partial_comment_delete.html', {'comment': comment}, request=request)
         return JsonResponse(data)
 

@@ -48,6 +48,7 @@ $(function () {
     //
     // when the user click on 'Edit'
     $(".js-update-comment").click(function () {
+    // $(".js-update-comment").bind('click', function () {
         var btn = $(this);
         $.ajax({
             url: btn.attr('data-url'),
@@ -59,7 +60,6 @@ $(function () {
             },
             success: function (data) {
                 // set the partial_comment_create.html in our template
-                $("#modal-comment .modal-content").html(data.html_form);
             }
         });
     });
@@ -75,7 +75,8 @@ $(function () {
             dataType: 'json',
             success: function(data) {
                 if (data.form_is_valid) {
-                    $("#comment-table tbody").html(data.html_comment_list);  // <-- Replace the table body
+                    // $("#comment-table tbody").html(data.html_comment_list);  // <-- Replace the table body
+                    $(data.html_comment_list).appendTo("#comment-table tbody");  // <-- Replace the table body
                     $("#modal-comment").modal("hide");  // <-- Close the modal
                 }
                 else {

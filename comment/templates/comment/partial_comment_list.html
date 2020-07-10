@@ -7,14 +7,14 @@
   <td>
     <button type="button"
             class="btn btn-warning btn-sm js-update-comment"
-            data-url="{% url 'comment_update' comment.id %}">
+            data-url="{% url 'comment_update' pk=comment.pk %}">
       <span class="glyphicon glyphicon-pencil"></span> Edit
     </button>
   </td>
   <td>
     <button type="button"
             class="btn btn-danger btn-sm js-delete-comment"
-            data-url="{% url 'comment_delete' comment.id %}">
+            data-url="{% url 'comment_delete' pk=comment.pk %}">
       <span class="glyphicon glyphicon-trash"></span>Delete
     </button>
   </td>

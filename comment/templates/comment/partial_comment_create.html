@@ -1,6 +1,7 @@
 {% load widget_tweaks %}
+{% load crispy_forms_tags %}
 
-<form method="post" action="{% url 'comment_create' %}" class="js-comment-create-form" >
+<form method="post" action="{% url 'comment_create' %}" class="js-comment-create-form" novalidate class='uniForm'>
   {% csrf_token %}
   <div class="modal-header">
     <h4 class="modal-title">Create a new comment</h4>
@@ -9,15 +10,18 @@
     </button>
   </div>
   <div class="modal-body">
+    {% comment %}
     {% for field in form %}
     <div class="form-group{% if field.errors %} has-error{% endif %}">
       <label for="{{ field.id_for_label }}">{{ field.label }}</label>
       {% render_field field class="form-control" %}
       {% for error in field.errors %}
-      <p class="help-block">{{ error }}</p>
+      <div class="alert alert-danger">{{ error }}</div>
       {% endfor %}
     </div>
     {% endfor %}
+    {% endcomment %}
+    {{ form|crispy }}
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

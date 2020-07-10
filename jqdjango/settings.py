@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'comment',
     'widget_tweaks',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -117,3 +118,4 @@ TEMPLATES[0]['DIRS'].append(os.path.join(BASE_DIR, 'templates'))
 #############################################
 
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
