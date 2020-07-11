@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'comment',
     'widget_tweaks',
     'crispy_forms',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -110,6 +111,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# to serve files during development
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# accounts app configuration  
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
 #############################################
 # Your project will probably also have static assets that aren’t tied to a particular app
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, "static") ] 
@@ -119,3 +129,6 @@ TEMPLATES[0]['DIRS'].append(os.path.join(BASE_DIR, 'templates'))
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+
